@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Ali's Restaurant - Book a Table{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Book a Table</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Welcome to Ali's Restaurant booking system. Check table availability or make a reservation below.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <h3>Check Availability</h3>
+                                    <p>See if we have tables available for your party</p>
+                                    <a href="{% url 'booking:available_tables' %}" class="btn btn-outline-primary">Check Availability</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <h3>Make a Reservation</h3>
+                                    <p>Book a table for your visit</p>
+                                    <a href="{% url 'booking:create_booking' %}" class="btn btn-primary">Book Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h3>Your Bookings</h3>
+                        <p>View or manage your existing reservations</p>
+                        <a href="{% url 'booking:booking_list' %}" class="btn btn-secondary">View My Bookings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Ali's Restaurant - My Bookings{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">My Bookings</h2>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                    <div class="messages mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if bookings %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Table</th>
+                                        <th>Guests</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for booking in bookings %}
+                                    <tr>
+                                        <td>{{ booking.booking_date }}</td>
+                                        <td>{{ booking.booking_time }}</td>
+                                        <td>{{ booking.table }}</td>
+                                        <td>{{ booking.number_of_guests }}</td>
+                                        <td>
+                                            <span class="badge {% if booking.status == 'confirmed' %}bg-success{% elif booking.status == 'pending' %}bg-warning{% elif booking.status == 'cancelled' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                                {{ booking.status|title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'booking:booking_detail' booking_id=booking.id %}" class="btn btn-sm btn-info">View</a>
+                                            {% if booking.status != 'cancelled' and booking.booking_date >= today %}
+                                            <a href="{% url 'booking:cancel_booking' booking_id=booking.id %}" class="btn btn-sm btn-danger">Cancel</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            You don't have any bookings yet.
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'booking:create_booking' %}" class="btn btn-primary">Make a New Booking</a>
+                        <a href="{% url 'booking:booking_home' %}" class="btn btn-secondary">Back to Booking Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
