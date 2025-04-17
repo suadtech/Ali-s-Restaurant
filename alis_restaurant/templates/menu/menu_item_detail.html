@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Ali's Restaurant - {{ menu_item.name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">{{ menu_item.name }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {% if menu_item.image %}
+                            <img src="{{ menu_item.image.url }}" class="img-fluid rounded mb-3" alt="{{ menu_item.name }}">
+                            {% else %}
+                            <div class="bg-light text-center py-5 mb-3 rounded">
+                                <i class="bi bi-image" style="font-size: 5rem;"></i>
+                                <p>No image available</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Details</h4>
+                            <p><strong>Category:</strong> <a href="{% url 'menu:category_detail' category_id=menu_item.category.id %}">{{ menu_item.category.name }}</a></p>
+                            <p><strong>Price:</strong> <span class="text-primary fw-bold">${{ menu_item.price }}</span></p>
+                            
+                            <div class="mb-3">
+                                <h5>Dietary Information</h5>
+                                <div class="d-flex flex-wrap">
+                                    {% if menu_item.is_vegetarian %}
+                                    <span class="badge bg-success me-1 mb-1">Vegetarian</span>
+                                    {% endif %}
+                                    {% if menu_item.is_vegan %}
+                                    <span class="badge bg-success me-1 mb-1">Vegan</span>
+                                    {% endif %}
+                                    {% if menu_item.is_gluten_free %}
+                                    <span class="badge bg-info me-1 mb-1">Gluten-Free</span>
+                                    {% endif %}
+                                    {% if menu_item.spice_level > 0 %}
+                                    <span class="badge bg-danger mb-1">
+                                        Spice Level: 
+                                        {% for i in "12345"|slice:":menu_item.spice_level" %}
+                                        🌶️
+                                        {% endfor %}
+                                    </span>
+                                    {% else %}
+                                    <span class="badge bg-secondary mb-1">Not Spicy</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            {% if allergens %}
+                            <div class="mb-3">
+                                <h5>Allergens</h5>
+                                <ul class="list-group">
+                                    {% for allergen_relation in allergens %}
+                                    <li class="list-group-item">{{ allergen_relation.allergen.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h4>Description</h4>
+                        <p>{{ menu_item.description }}</p>
+                    </div>
+                    
+                    <div class="mt-4 d-flex justify-content-between">
+                        <a href="{% url 'menu:category_detail' category_id=menu_item.category.id %}" class="btn btn-secondary">Back to {{ menu_item.category.name }}</a>
+                        <a href="{% url 'menu:menu_home' %}" class="btn btn-outline-primary">Back to Menu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

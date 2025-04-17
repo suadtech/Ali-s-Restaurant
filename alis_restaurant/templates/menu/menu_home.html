@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Ali's Restaurant - Menu{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Our Menu</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Welcome to Ali's Restaurant. Explore our delicious menu offerings below.</p>
+                    
+                    {% if featured_items %}
+                    <section class="mb-5">
+                        <h3>Featured Items</h3>
+                        <div class="row">
+                            {% for item in featured_items %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    {% if item.image %}
+                                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
+                                    {% else %}
+                                    <div class="card-img-top bg-light text-center py-5">
+                                        <i class="bi bi-image" style="font-size: 3rem;"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ item.name }}</h5>
+                                        <p class="card-text">{{ item.description|truncatechars:100 }}</p>
+                                        <p class="card-text text-primary fw-bold">${{ item.price }}</p>
+                                        <div class="d-flex">
+                                            {% if item.is_vegetarian %}
+                                            <span class="badge bg-success me-1">Vegetarian</span>
+                                            {% endif %}
+                                            {% if item.is_vegan %}
+                                            <span class="badge bg-success me-1">Vegan</span>
+                                            {% endif %}
+                                            {% if item.is_gluten_free %}
+                                            <span class="badge bg-info me-1">Gluten-Free</span>
+                                            {% endif %}
+                                            {% if item.spice_level > 0 %}
+                                            <span class="badge bg-danger">
+                                                Spice: 
+                                                {% for i in "12345"|slice:":item.spice_level" %}
+                                                🌶️
+                                                {% endfor %}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="{% url 'menu:menu_item_detail' item_id=item.id %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'menu:featured_items' %}" class="btn btn-outline-primary">View All Featured Items</a>
+                        </div>
+                    </section>
+                    {% endif %}
+                    
+                    <section>
+                        <h3>Menu Categories</h3>
+                        <div class="row">
+                            {% for category in categories %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ category.name }}</h5>
+                                        <p class="card-text">{{ category.description|default:""|truncatechars:100 }}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="{% url 'menu:category_detail' category_id=category.id %}" class="btn btn-primary">Browse Items</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    
+                    <div class="mt-4 text-center">
+                        <a href="{% url 'menu:menu_item_list' %}" class="btn btn-secondary">View All Menu Items</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
